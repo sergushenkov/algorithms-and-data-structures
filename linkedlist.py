@@ -40,7 +40,7 @@ class LinkedList:
                 finded.append(node)
             node = node.next
         return finded
-    
+
     def delete(self, val, all=False):
         prev_node = None
         node = self.head
