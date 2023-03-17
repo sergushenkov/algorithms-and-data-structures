@@ -67,6 +67,15 @@ class TestLinkedList(unittest.TestCase):
         self.assertEqual(node_a.next, node_b, 'node_a.next is not node_b')
         self.assertIsNone(node_b.next, 'node_b.next is not None')
 
+    def test_find_all(self):
+        for value in [0, 2, 2, 2, 0]:
+            node = Node(value)
+            self.linked_list.add_in_tail(node)
+        self.assertEqual(len(self.linked_list.find_all(0)), 2, 'find 0 is not correct')
+        self.assertEqual(len(self.linked_list.find_all(2)), 3, 'find 2 is not correct') 
+        self.assertEqual(self.linked_list.find_all(0)[0].value, 0, 'not correct node in list')
+        self.assertEqual(self.linked_list.find_all(1), [], 'for 1 must be empty list')
+
     def test_delete_one(self):
         for value in [0, 1, 2, 2, 3, 0]:
             node = Node(value)
