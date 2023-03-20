@@ -1,9 +1,22 @@
-from linkedlist import Node, LinkedList
+'''
+merge_linked_list() - the function accepts two linked lists
+and returns a linked list of the same length, the node values of which are
+equal to the sum of the values of the original lists
+'''
+
+from linkedlist import LinkedList, Node
 
 
-def merge_linked_list(llist_1, llist_2):
+def merge_linked_list(llist_1: LinkedList,
+                      llist_2: LinkedList) -> None | LinkedList:
+    '''
+    The function accepts two linked lists and returns a linked list
+    of the same length, the node values of which are
+    equal to the sum of the values of the original lists.
+    If the length of the source lists differs, the function returns None
+    '''
     if llist_1.len() != llist_2.len():
-        return
+        return None
     sum_llist = LinkedList()
     node_1 = llist_1.head
     node_2 = llist_2.head
