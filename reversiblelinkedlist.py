@@ -4,7 +4,8 @@ class Node:
         self.prev = None
         self.next = None
 
-class LinkedList2:  
+
+class LinkedList2:
     def __init__(self):
         self.head = None
         self.tail = None
@@ -45,11 +46,11 @@ class LinkedList2:
                     self.tail = None
                 elif node is self.head:
                     self.head = node.next
-                    self.head.prev = None         
+                    self.head.prev = None
                 elif node is self.tail:
                     self.tail = node.prev
                     self.tail.next = None
-                else:    
+                else:
                     node.next.prev = node.prev
                     node.prev.next = node.next
                 if not all:
@@ -89,7 +90,6 @@ class LinkedList2:
             if newNode.next is not None:
                 newNode.next.prev = newNode
 
-
     def add_in_head(self, newNode):
         newNode.next = self.head
         newNode.prev = None
@@ -97,4 +97,4 @@ class LinkedList2:
             self.tail = newNode
         else:
             self.head.prev = newNode
-        self.head = newNode      
+        self.head = newNode

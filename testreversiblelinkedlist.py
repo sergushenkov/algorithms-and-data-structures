@@ -124,7 +124,7 @@ class TestFunctions(unittest.TestCase):
                          'head.next.next must be tail')
         self.assertEqual(self.rlist.tail.prev.prev, self.rlist.head,
                          'tail.prev.prev must be head')
-        
+
     def test_add_in_head(self):
         node = Node(1)
         self.rlist.add_in_head(node)
