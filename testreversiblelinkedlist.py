@@ -97,41 +97,139 @@ class TestFunctions(unittest.TestCase):
             self.assertEqual(self.rlist.len(), value, 'length is not correct')
 
     def test_insert(self):
-        node = Node(1)
-        self.rlist.insert(None, node)
+        node_1 = Node(1)
+        node_7 = Node(7)
+        # insert in empty after non - existent
+        self.rlist.insert(node_7, node_1)  # [None]
+        self.assertIsNone(self.rlist.head, 'head must be None')
+        self.assertIsNone(self.rlist.tail, 'tail must be None')
+        # insert in empty
+        self.rlist.insert(None, node_1)  # [1]
         self.assertEqual(self.rlist.head.value, 1, 'head.value must be 1')
-        self.assertIsNone(self.rlist.head.next, 'head.next must be None')
         self.assertIsNone(self.rlist.head.prev, 'head.prev must be None')
+        self.assertIsNone(self.rlist.head.next, 'head.next must be None')
         self.assertEqual(self.rlist.tail.value, 1, 'tail.value must be 1')
-        self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
         self.assertIsNone(self.rlist.tail.prev, 'tail.prev must be None')
-        node = Node(3)
-        self.rlist.insert(None, node)
+        self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
+        node_3 = Node(3)
+        # insert in tail
+        self.rlist.insert(None, node_3)  # [1] -> [3]
         self.assertEqual(self.rlist.head.value, 1, 'head.value must be 1')
+        self.assertIsNone(self.rlist.head.prev, 'head.prev must be None')
         self.assertEqual(self.rlist.head.next, self.rlist.tail,
                          'head.next must be tail')
         self.assertEqual(self.rlist.tail.prev, self.rlist.head,
                          'tail.prev must be head')
         self.assertEqual(self.rlist.tail.value, 3, 'tail.value must be 3')
         self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
-        node = Node(2)
-        self.rlist.insert(self.rlist.head, node)
+        node_5 = Node(5)
+        # insert in tail
+        self.rlist.insert(None, node_5)  # [1] -> [3] -> [5]
         self.assertEqual(self.rlist.head.value, 1, 'head.value must be 1')
-        self.assertEqual(self.rlist.head.next.value, 2, 'head.value must be 2')
-        self.assertEqual(self.rlist.head.next.next.value,
-                         3, 'head.value must be 3')
+        self.assertIsNone(self.rlist.head.prev, 'head.prev must be None')
+        self.assertEqual(self.rlist.head.next, self.rlist.tail.prev,
+                         'head.next.next must be tail')
+        self.assertEqual(self.rlist.head.next.value, 3,
+                         'head.next must be tail.prev')
         self.assertEqual(self.rlist.head.next.next, self.rlist.tail,
                          'head.next.next must be tail')
+        self.assertEqual(self.rlist.tail.value, 5, 'tail.value must be 5')
         self.assertEqual(self.rlist.tail.prev.prev, self.rlist.head,
                          'tail.prev.prev must be head')
+        self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
+        node_2 = Node(2)
+        # insert after head
+        self.rlist.insert(node_1, node_2)  # [1] -> [2] -> [3] -> [5]
+        self.assertEqual(self.rlist.head.value, 1, 'head.value must be 1')
+        self.assertIsNone(self.rlist.head.prev, 'head.prev must be None')
+        self.assertEqual(self.rlist.head.next, self.rlist.tail.prev.prev, 
+                         'head.next must be tail.prev.prev')
+        self.assertEqual(self.rlist.head.next.value, 2, 'head.next.value must be 2')
+        self.assertEqual(self.rlist.head.next.next, self.rlist.tail.prev,
+                         'head.next.next must be tail.prev')
+        self.assertEqual(self.rlist.head.next.next.value,
+                         3, 'head.next.next.value must be 3')
+        self.assertEqual(self.rlist.head.next.next.next, self.rlist.tail,
+                         'head.next.next.next must be tail')
+        self.assertEqual(self.rlist.tail.value,
+                         5, 'head.tail.value must be 5')
+        self.assertEqual(self.rlist.tail.prev.prev.prev, self.rlist.head,
+                         'tail.prev.prev.prev must be head')
+        self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
+        node_4 = Node(4)
+        # insert in middle
+        self.rlist.insert(node_3, node_4)  # [1] -> [2] -> [3] -> [4] -> [5]
+        self.assertEqual(self.rlist.head.value, 1, 'head.value must be 1')
+        self.assertIsNone(self.rlist.head.prev, 'head.prev must be None')
+        self.assertEqual(self.rlist.head.next, self.rlist.tail.prev.prev.prev, 
+                         'head.next must be tail.prev.prev.prev')        
+        self.assertEqual(self.rlist.head.next.value, 2, 'head.next.value must be 2')
+        self.assertEqual(self.rlist.head.next.next, self.rlist.tail.prev.prev, 
+                         'head.next.next must be tail.prev.prev') 
+        self.assertEqual(self.rlist.head.next.next.value,
+                         3, 'head.next.next.value must be 3')
+        self.assertEqual(self.rlist.head.next.next.next, self.rlist.tail.prev, 
+                         'head.next.next.next must be tail.prev')         
+        self.assertEqual(self.rlist.head.next.next.next.value,
+                         4, 'head.next.next.next.value must be 4')
+        self.assertEqual(self.rlist.head.next.next.next.next, self.rlist.tail, 
+                         'head.next.next.next.next must be tail')          
+        self.assertEqual(self.rlist.head.next.next.next.next.value,
+                         5, 'head.next.next.next.next.value must be 5')        
+        self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
+        node_6 = Node(6)
+        # insert after non - existent
+        self.rlist.insert(node_7, node_6)  # [1] -> [2] -> [3] -> [4] -> [5]
+        self.assertEqual(self.rlist.head.value, 1, 'head.value must be 1')
+        self.assertIsNone(self.rlist.head.prev, 'head.prev must be None')
+        self.assertEqual(self.rlist.head.next, self.rlist.tail.prev.prev.prev, 
+                         'head.next must be tail.prev.prev.prev')        
+        self.assertEqual(self.rlist.head.next.value, 2, 'head.next.value must be 2')
+        self.assertEqual(self.rlist.head.next.next, self.rlist.tail.prev.prev, 
+                         'head.next.next must be tail.prev.prev') 
+        self.assertEqual(self.rlist.head.next.next.value,
+                         3, 'head.next.next.value must be 3')
+        self.assertEqual(self.rlist.head.next.next.next, self.rlist.tail.prev, 
+                         'head.next.next.next must be tail.prev')         
+        self.assertEqual(self.rlist.head.next.next.next.value,
+                         4, 'head.next.next.next.value must be 4')
+        self.assertEqual(self.rlist.head.next.next.next.next, self.rlist.tail, 
+                         'head.next.next.next.next must be tail')          
+        self.assertEqual(self.rlist.head.next.next.next.next.value,
+                         5, 'head.next.next.next.next.value must be 5')        
+        self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
+        # insert after last
+        self.rlist.insert(node_5, node_6)  # [1] -> [2] -> [3] -> [4] -> [5] -> [6]
+        self.assertEqual(self.rlist.head.value, 1, 'head.value must be 1')
+        self.assertIsNone(self.rlist.head.prev, 'head.prev must be None')
+        self.assertEqual(self.rlist.head.next, self.rlist.tail.prev.prev.prev.prev, 
+                         'head.next must be tail.prev.prev.prev.prev')        
+        self.assertEqual(self.rlist.head.next.value, 2, 'head.next.value must be 2')
+        self.assertEqual(self.rlist.head.next.next, self.rlist.tail.prev.prev.prev, 
+                         'head.next.next must be tail.prev.prev.prev') 
+        self.assertEqual(self.rlist.head.next.next.value,
+                         3, 'head.next.next.value must be 3')
+        self.assertEqual(self.rlist.head.next.next.next, self.rlist.tail.prev.prev, 
+                         'head.next.next.next must be tail.prev.prev')         
+        self.assertEqual(self.rlist.head.next.next.next.value,
+                         4, 'head.next.next.next.value must be 4')
+        self.assertEqual(self.rlist.head.next.next.next.next, self.rlist.tail.prev, 
+                         'head.next.next.next.next must be tail.prev')          
+        self.assertEqual(self.rlist.head.next.next.next.next.value,
+                         5, 'head.next.next.next.next.value must be 5') 
+        self.assertEqual(self.rlist.head.next.next.next.next.next, self.rlist.tail, 
+                         'head.next.next.next.next.next must be tail')          
+        self.assertEqual(self.rlist.head.next.next.next.next.next.value,
+                         6, 'head.next.next.next.next.next.value must be 6')       
+        self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
 
     def test_add_in_head(self):
-        node = Node(1)
+        node = Node(4)
         self.rlist.add_in_head(node)
-        self.assertEqual(self.rlist.head.value, 1, 'head.value must be 1')
+        self.assertEqual(self.rlist.head.value, 4, 'head.value must be 4')
         self.assertIsNone(self.rlist.head.next, 'head.next must be None')
         self.assertIsNone(self.rlist.head.prev, 'head.prev must be None')
-        self.assertEqual(self.rlist.tail.value, 1, 'tail.value must be 1')
+        self.assertEqual(self.rlist.tail.value, 4, 'tail.value must be 4')
         self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
         self.assertIsNone(self.rlist.tail.prev, 'tail.prev must be None')
         node = Node(3)
@@ -141,9 +239,26 @@ class TestFunctions(unittest.TestCase):
                          'head.next must be tail')
         self.assertEqual(self.rlist.tail.prev, self.rlist.head,
                          'tail.prev must be head')
-        self.assertEqual(self.rlist.tail.value, 1, 'tail.value must be 1')
+        self.assertEqual(self.rlist.tail.value, 4, 'tail.value must be 4')
         self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
-
+        node = Node(2)
+        self.rlist.add_in_head(node)
+        node = Node(1)
+        self.rlist.add_in_head(node)
+        self.assertEqual(self.rlist.head.value, 1, 'head.value must be 1')
+        self.assertEqual(self.rlist.head.next.value, 2, 'head.next.value must be 2')
+        self.assertEqual(self.rlist.head.next.next.value,
+                         3, 'head.next.next.value must be 3')
+        self.assertEqual(self.rlist.head.next.next.next.value,
+                         4, 'head.next.next.next.value must be 4')
+        self.assertEqual(self.rlist.tail.value,
+                         4, 'head.tail.value must be 4')
+        self.assertEqual(self.rlist.head.next.next.next, self.rlist.tail,
+                         'head.next.next.next must be tail')
+        self.assertEqual(self.rlist.tail.prev.prev.prev, self.rlist.head,
+                         'tail.prev.prev.prev must be head')
+        self.assertIsNone(self.rlist.head.prev, 'head.prev must be None')
+        self.assertIsNone(self.rlist.tail.next, 'tail.next must be None')
 
 if __name__ == '__main__':
     unittest.main()
