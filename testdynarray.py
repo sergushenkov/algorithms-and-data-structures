@@ -73,14 +73,32 @@ class TestFunctions(unittest.TestCase):
             self.assertEqual(self.dyn_arr.capacity, 21)
         self.dyn_arr.delete(8)
         self.assertEqual(self.dyn_arr.count, 10)
-        self.assertEqual(self.dyn_arr.capacity, 16)
+        self.assertEqual(self.dyn_arr.capacity, 21)
         for i in  range(9):
             self.assertEqual(self.dyn_arr[i], 2 * i)
         self.assertEqual(self.dyn_arr[9], 17)
         for i in range(10):
             self.dyn_arr.delete(0)
             self.assertEqual(self.dyn_arr.count, 9 - i)
-            self.assertEqual(self.dyn_arr.capacity, 16)
+            self.assertEqual(self.dyn_arr.capacity, 21)
+        self.assertRaises(IndexError, self.dyn_arr.__getitem__, 0)
+
+    def test_delete_with_resize(self):
+        for i in range(129):
+            self.dyn_arr.append(i)
+        self.assertEqual(self.dyn_arr.count, 129)
+        self.assertEqual(self.dyn_arr.capacity, 256)
+        cnt = 129
+        cpct = 256
+        for i in range(129):
+            self.dyn_arr.delete(0)
+            cnt -= 1
+            if 24 <= cpct and cnt < cpct / 2:
+                cpct = max(16, cpct // 1.5)
+                self.assertEqual(self.dyn_arr.count, cnt)
+                self.assertEqual(self.dyn_arr.capacity, cpct)                
+        self.assertEqual(self.dyn_arr.count, 0)
+        self.assertEqual(self.dyn_arr.capacity, 22)
         self.assertRaises(IndexError, self.dyn_arr.__getitem__, 0)
 
 
