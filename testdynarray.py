@@ -56,24 +56,31 @@ class TestFunctions(unittest.TestCase):
         self.assertEqual(self.dyn_arr.count, 0)
         self.assertEqual(self.dyn_arr.capacity, 16)
         self.assertRaises(IndexError, self.dyn_arr.__getitem__, 0)
+
         for i in range(18):
             self.dyn_arr.append(i)
-        self.dyn_arr.delete(0)
+        self.dyn_arr.delete(1)
         self.assertEqual(self.dyn_arr.count, 17)
         self.assertEqual(self.dyn_arr.capacity, 32)
-        self.dyn_arr.delete(10)
+        self.dyn_arr.delete(2)
         self.assertEqual(self.dyn_arr.count, 16)
-        self.assertEqual(self.dyn_arr.capacity, 16)
-        cnt = 0
-        for i in range(16):
-            if i == 0 or i == 10:  # is deleted
-                cnt += 1
-            self.assertEqual(self.dyn_arr[i], cnt)
-            cnt += 1
-        for i in range(15, -1, -1):
+        self.assertEqual(self.dyn_arr.capacity, 32)
+        cnt = 16
+        for i in range(3, 8):
             self.dyn_arr.delete(i)
-        self.assertEqual(self.dyn_arr.count, 0)
+            cnt -= 1
+            self.assertEqual(self.dyn_arr.count, cnt)
+            self.assertEqual(self.dyn_arr.capacity, 21)
+        self.dyn_arr.delete(8)
+        self.assertEqual(self.dyn_arr.count, 10)
         self.assertEqual(self.dyn_arr.capacity, 16)
+        for i in  range(9):
+            self.assertEqual(self.dyn_arr[i], 2 * i)
+        self.assertEqual(self.dyn_arr[9], 17)
+        for i in range(10):
+            self.dyn_arr.delete(0)
+            self.assertEqual(self.dyn_arr.count, 9 - i)
+            self.assertEqual(self.dyn_arr.capacity, 16)
         self.assertRaises(IndexError, self.dyn_arr.__getitem__, 0)
 
 
