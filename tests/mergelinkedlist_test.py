@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0,'..')
+
 import unittest
 from linkedlist import Node, LinkedList
 from mergelinkedlist import merge_linked_list
