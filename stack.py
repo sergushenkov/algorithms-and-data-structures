@@ -1,22 +1,19 @@
-from typing import Any
-
-
 class Stack:
-    def __init__(self) -> None:
-        self.stack: list = []
+    def __init__(self):
+        self.stack = []
 
-    def size(self) -> int:
+    def size(self):
         return len(self.stack)
 
-    def pop(self) -> None | Any:
+    def pop(self):
         if len(self.stack) > 0:
             return self.stack.pop()
         return None
 
-    def push(self, value: Any) -> None:
+    def push(self, value):
         self.stack.append(value)
 
-    def peek(self) -> None | Any:
+    def peek(self):
         if len(self.stack) > 0:
             return self.stack[-1]
         return None
