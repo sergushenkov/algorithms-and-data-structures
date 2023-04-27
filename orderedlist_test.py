@@ -187,18 +187,18 @@ class OrderedListTest(unittest.TestCase):
             self.ol.add(value)
         self.assertIsNone(self.ol.find(0), 'should be None')
         self.assertIsNone(self.ol.find(5), 'should be None')
-        self.assertEqual(self.ol.find(1), 1, 'should be 1')
-        self.assertEqual(self.ol.find(2), 2, 'should be 2')
-        self.assertEqual(self.ol.find(4), 4, 'should be 4')
+        self.assertEqual(self.ol.find(1).value, 1, 'should be 1')
+        self.assertEqual(self.ol.find(2).value, 2, 'should be 2')
+        self.assertEqual(self.ol.find(4).value, 4, 'should be 4')
         self.ol.clean(False)
         self.assertIsNone(self.ol.find(0), 'should be None')
         for value in [1, 2, 3, 4]:
             self.ol.add(value)
         self.assertIsNone(self.ol.find(0), 'should be None')
         self.assertIsNone(self.ol.find(5), 'should be None')
-        self.assertEqual(self.ol.find(1), 1, 'should be 1')
-        self.assertEqual(self.ol.find(2), 2, 'should be 2')
-        self.assertEqual(self.ol.find(4), 4, 'should be 4')
+        self.assertEqual(self.ol.find(1).value, 1, 'should be 1')
+        self.assertEqual(self.ol.find(2).value, 2, 'should be 2')
+        self.assertEqual(self.ol.find(4).value, 4, 'should be 4')
 
 
 class OrderedStringListTest(unittest.TestCase):
