@@ -1,5 +1,5 @@
 import unittest
-from orderedlist import OrderedList
+from orderedlist import OrderedList, OrderedStringList
 
 
 class OrderedListTest(unittest.TestCase):
@@ -14,14 +14,22 @@ class OrderedListTest(unittest.TestCase):
         self.assertIsNone(self.ol_1.tail, 'tail is not None')
 
     def test_compare(self):
-        self.assertEqual(self.ol.compare(1, 1), 0, 'compare(1, 1) should return 0')
-        self.assertEqual(self.ol.compare(1, 2), -1, 'compare(1, 2) should return -1')
-        self.assertEqual(self.ol.compare(2, 1), 1, 'compare(2, 1) should return 1')
-        self.assertEqual(self.ol.compare(1, 0), 1, 'compare(1, 0) should return 1')
-        self.assertEqual(self.ol.compare(0, -1), 1, 'compare(0, -1) should return 1')
-        self.assertEqual(self.ol.compare(0, 0), 0, 'compare(0, 0) should return 0')
-        self.assertEqual(self.ol.compare(-1, 0), -1, 'compare(-1, 0) should return -1')
-        self.assertEqual(self.ol.compare(-1, -1), 0, 'compare(-1, -1) should return 0')
+        self.assertEqual(self.ol.compare(1, 1), 0,
+                         'compare(1, 1) should return 0')
+        self.assertEqual(self.ol.compare(1, 2), -1,
+                         'compare(1, 2) should return -1')
+        self.assertEqual(self.ol.compare(2, 1), 1,
+                         'compare(2, 1) should return 1')
+        self.assertEqual(self.ol.compare(1, 0), 1,
+                         'compare(1, 0) should return 1')
+        self.assertEqual(self.ol.compare(0, -1), 1,
+                         'compare(0, -1) should return 1')
+        self.assertEqual(self.ol.compare(0, 0), 0,
+                         'compare(0, 0) should return 0')
+        self.assertEqual(self.ol.compare(-1, 0), -1,
+                         'compare(-1, 0) should return -1')
+        self.assertEqual(self.ol.compare(-1, -1), 0,
+                         'compare(-1, -1) should return 0')
 
     def test_add(self):
         self.ol.add(2)
@@ -30,16 +38,18 @@ class OrderedListTest(unittest.TestCase):
         self.ol.add(3)
         self.assertEqual(self.ol.head.value, 1, 'head should be 1')
         self.assertEqual(self.ol.head.next.value, 2, 'head.next should be 2')
-        self.assertEqual(self.ol.head.next.next.value, 3, 'head.next should be 3')
-        self.assertEqual(self.ol.head.next.next.next.value, 4, 'head.next should be 4')
+        self.assertEqual(self.ol.head.next.next.value,
+                         3, 'head.next should be 3')
+        self.assertEqual(self.ol.head.next.next.next.value,
+                         4, 'head.next should be 4')
         self.assertEqual(self.ol.head.value, self.ol.tail.prev.prev.prev.value,
-        'head should be tail.prev.prev.prev')
+                         'head should be tail.prev.prev.prev')
         self.assertEqual(self.ol.head.next.value, self.ol.tail.prev.prev.value,
-        'head.next should be tail.prev.prev')
+                         'head.next should be tail.prev.prev')
         self.assertEqual(self.ol.head.next.next.value, self.ol.tail.prev.value,
-        'head.next.next should be tail.prev')
+                         'head.next.next should be tail.prev')
         self.assertEqual(self.ol.head.next.next.next.value, self.ol.tail.value,
-        'head.next.next.next should be tail')
+                         'head.next.next.next should be tail')
         self.assertIsNone(self.ol.head.prev, 'head.prev should be None')
         self.assertIsNone(self.ol.tail.next, 'tail.next should be None')
 
@@ -51,16 +61,18 @@ class OrderedListTest(unittest.TestCase):
         self.ol.add(3)
         self.assertEqual(self.ol.head.value, 4, 'head should be 1')
         self.assertEqual(self.ol.head.next.value, 3, 'head.next should be 2')
-        self.assertEqual(self.ol.head.next.next.value, 2, 'head.next should be 3')
-        self.assertEqual(self.ol.head.next.next.next.value, 1, 'head.next should be 4')
+        self.assertEqual(self.ol.head.next.next.value,
+                         2, 'head.next should be 3')
+        self.assertEqual(self.ol.head.next.next.next.value,
+                         1, 'head.next should be 4')
         self.assertEqual(self.ol.head.value, self.ol.tail.prev.prev.prev.value,
-        'head should be tail.prev.prev.prev')
+                         'head should be tail.prev.prev.prev')
         self.assertEqual(self.ol.head.next.value, self.ol.tail.prev.prev.value,
-        'head.next should be tail.prev.prev')
+                         'head.next should be tail.prev.prev')
         self.assertEqual(self.ol.head.next.next.value, self.ol.tail.prev.value,
-        'head.next.next should be tail.prev')
+                         'head.next.next should be tail.prev')
         self.assertEqual(self.ol.head.next.next.next.value, self.ol.tail.value,
-        'head.next.next.next should be tail')
+                         'head.next.next.next should be tail')
         self.assertIsNone(self.ol.head.prev, 'head.prev should be None')
         self.assertIsNone(self.ol.tail.next, 'tail.next should be None')
 
@@ -148,14 +160,14 @@ class OrderedListTest(unittest.TestCase):
     def test_clean(self):
         for value in [1, 2, 3, 4]:
             self.ol.add(value)
-        self.ol.clean(False)  
+        self.ol.clean(False)
         self.assertIsNone(self.ol.head, 'head should be None')
         self.assertIsNone(self.ol.tail, 'tail should be None')
         for value in [1, 2, 3, 4]:
             self.ol.add(value)
         self.assertEqual(self.ol.head.value, 4, 'head should be 4')
         self.assertEqual(self.ol.tail.value, 1, 'tail should be 1')
-        self.ol.clean(True)  
+        self.ol.clean(True)
         self.assertIsNone(self.ol.head, 'head should be None')
         self.assertIsNone(self.ol.tail, 'tail should be None')
         for value in [1, 2, 3, 4]:
@@ -169,6 +181,42 @@ class OrderedListTest(unittest.TestCase):
             self.ol.add(value)
             self.assertEqual(self.ol.len(), value, 'len is not correct')
 
+    def test_find(self):
+        self.assertIsNone(self.ol.find(0), 'should be None')
+        for value in [1, 2, 3, 4]:
+            self.ol.add(value)
+        self.assertIsNone(self.ol.find(0), 'should be None')
+        self.assertIsNone(self.ol.find(5), 'should be None')
+        self.assertEqual(self.ol.find(1), 1, 'should be 1')
+        self.assertEqual(self.ol.find(2), 2, 'should be 2')
+        self.assertEqual(self.ol.find(4), 4, 'should be 4')
+        self.ol.clean(False)
+        self.assertIsNone(self.ol.find(0), 'should be None')
+        for value in [1, 2, 3, 4]:
+            self.ol.add(value)
+        self.assertIsNone(self.ol.find(0), 'should be None')
+        self.assertIsNone(self.ol.find(5), 'should be None')
+        self.assertEqual(self.ol.find(1), 1, 'should be 1')
+        self.assertEqual(self.ol.find(2), 2, 'should be 2')
+        self.assertEqual(self.ol.find(4), 4, 'should be 4')
 
-if    __name__ == '__main__':
+
+class OrderedStringListTest(unittest.TestCase):
+    def setUp(self):
+        self.osl = OrderedStringList()
+
+    def test_compare(self):
+        self.assertEqual(self.osl.compare('', '   '), 0,
+                         'compare() should return 0')
+        self.assertEqual(self.osl.compare('a', 'aa'), -1,
+                         'compare() should return -1')
+        self.assertEqual(self.osl.compare('  a   ', 'a'), 0,
+                         'compare() should return 0')
+        self.assertEqual(self.osl.compare('aa', 'a a'), 1,
+                         'compare() should return 1')
+        self.assertEqual(self.osl.compare('   aa', '   a a   '), 1,
+                         'compare(0, -1) should return 1')
+
+
+if __name__ == '__main__':
     unittest.main()

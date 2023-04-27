@@ -4,6 +4,7 @@ class Node:
         self.prev = None
         self.next = None
 
+
 class OrderedList:
     def __init__(self, asc=True):
         self.head = None
@@ -61,10 +62,17 @@ class OrderedList:
         node.next = left
         left.prev = node
         return
-            
 
     def find(self, val):
-        return None # здесь будет ваш код
+        node = self.head
+        while node is not None:
+            if node.value == val:
+                return node.value
+            if (self.__ascending and node.value > val
+                    ) or (not self.__ascending and node.value < val):
+                return None
+            node = node.next
+        return None
 
     def delete(self, val):
         prev_node = None
@@ -86,14 +94,14 @@ class OrderedList:
                 break
                 node = node.next
             elif (OrderedList.compare(self, node.value, val) > 0 and self.__ascending
-                  ) or (OrderedList.compare(self, node.value, val) < 0 
+                  ) or (OrderedList.compare(self, node.value, val) < 0
                         and not self.__ascending):
                 return
             else:
                 prev_node = node
                 node = node.next
 
-    def clean(self, asc):
+    def clean(self, asc=True):
         self.__ascending = asc
         self.head = None
         self.tail = None
@@ -114,10 +122,16 @@ class OrderedList:
             node = node.next
         return r
 
+
 class OrderedStringList(OrderedList):
-    def __init__(self, asc):
+    def __init__(self, asc=True):
         super(OrderedStringList, self).__init__(asc)
 
     def compare(self, v1, v2):
-        # переопределённая версия для строк
+        v1 = v1.strip()
+        v2 = v2.strip()
+        if v1 < v2:
+            return -1
+        elif v1 > v2:
+            return 1
         return 0
