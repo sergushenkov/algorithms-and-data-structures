@@ -16,18 +16,36 @@ class TestPowerSet(unittest.TestCase):
         self.ps.put("a")
         self.ps.put("a")
         self.assertEqual(self.ps.size(), 1)
+        self.ps.put("321")
+        self.ps.put("123")
+        self.ps.put("213")
+        self.assertEqual(self.ps.size(), 4)
 
     def test_get(self):
         self.assertFalse(self.ps.get("a"), "a is not in the set")
         self.ps.put("a")
         self.assertTrue(self.ps.get("a"), "a is in the set")
         self.assertFalse(self.ps.get("b"), "b is not in the set")
+        self.ps.put("321")
+        self.ps.put("123")
+        self.ps.put("213")
+        self.assertTrue(self.ps.get("321"), "321 is in the set")
+        self.assertTrue(self.ps.get("123"), "123 is in the set")
+        self.assertTrue(self.ps.get("213"), "213 is in the set")
+        self.assertFalse(self.ps.get("132"), "132 is not in the set")
 
     def test_remove(self):
         self.assertFalse(self.ps.remove("a"), "a is not in the set")
         self.ps.put("a")
         self.assertTrue(self.ps.remove("a"), "a is in the set")
         self.assertFalse(self.ps.remove("a"), "a is not in the set")
+        self.ps.put("321")
+        self.ps.put("123")
+        self.ps.put("213")
+        self.assertFalse(self.ps.remove("132"), "132 is not in the set")
+        self.assertTrue(self.ps.remove("213"), "213 is in the set")
+        self.assertTrue(self.ps.remove("123"), "123 is in the set")
+        self.assertTrue(self.ps.remove("321"), "321 is in the set")
 
     def test_intersection(self):
         self.ps2 = PowerSet()
@@ -64,6 +82,13 @@ class TestPowerSet(unittest.TestCase):
         self.assertEqual(result.size(), 2)
         self.assertTrue(result.get("a"), "a is in the set")
         self.assertTrue(result.get("b"), "b is in the set")
+        self.ps.put("321")
+        self.ps.put("123")
+        self.ps2.put("213")
+        result = self.ps.union(self.ps2)
+        self.assertTrue(result.get("321"), "321 is in the set")
+        self.assertTrue(result.get("123"), "123 is in the set")   
+        self.assertTrue(result.get("213"), "213 is in the set")       
 
     def test_difference(self):
         self.ps2 = PowerSet()
