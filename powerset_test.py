@@ -44,8 +44,8 @@ class TestPowerSet(unittest.TestCase):
         self.ps.put("213")
         self.assertFalse(self.ps.remove("132"), "132 is not in the set")
         self.assertTrue(self.ps.remove("213"), "213 is in the set")
-        self.assertTrue(self.ps.remove("123"), "123 is in the set")
         self.assertTrue(self.ps.remove("321"), "321 is in the set")
+        self.assertTrue(self.ps.remove("123"), "123 is in the set")
 
     def test_intersection(self):
         self.ps2 = PowerSet()

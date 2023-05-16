@@ -1,4 +1,7 @@
-'''Некорректный размер множества после добавления элементов'''
+'''
+Некорректный размер множества после добавления элементов
+Некорректное удаление элемента из непустого множества
+'''
 
 
 class PowerSet:
@@ -31,24 +34,22 @@ class PowerSet:
         i = sum(value.encode()) % self.max_len
         cnt = 0
         while cnt < self.max_len:
-            if self.slots[i] is None:
-                return False
             if self.slots[i] == value:
                 return True
             i = (i + self.step) % self.max_len
             cnt += 1
+        return False
 
     def remove(self, value):
         i = sum(value.encode()) % self.max_len
         cnt = 0
         while cnt < self.max_len:
-            if self.slots[i] is None:
-                return False
             if self.slots[i] == value:
                 self.slots[i] = None
                 return True
             i = (i + self.step) % self.max_len
-            cnt += 1        
+            cnt += 1
+        return False
 
     def intersection(self, set2):
         result = PowerSet()
