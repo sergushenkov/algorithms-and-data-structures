@@ -1,57 +1,49 @@
 class SimpleTreeNode:
-	
     def __init__(self, val, parent=None):
-        self.NodeValue = val # значение в узле
-        self.Parent = parent # родитель или None для корня
-        self.Children = [] # список дочерних узлов
-	
-class SimpleTree:
+        self.NodeValue = val  # значение в узле
+        self.Parent = parent  # родитель или None для корня
+        self.Children = []  # список дочерних узлов
 
+
+class SimpleTree:
     def __init__(self, root=None):
-        self.Root = root # корень, может быть None
-	
+        self.Root = root  # корень, может быть None
+
     def AddChild(self, ParentNode, NewChild):
         NewChild.Parent = ParentNode
         ParentNode.Children.append(NewChild)
-  
+
     def DeleteNode(self, NodeToDelete):
         NodeToDelete.Parent.Children.remove(NodeToDelete)
         NodeToDelete.Parent = None
 
     def GetAllNodes(self):
-        # ваш код выдачи всех узлов дерева в определённом порядке
-        return []
+        if self.Root is None:
+            return []
+        nodes = [self.Root]
+        for node in self.Root.Children:
+            child_tree = SimpleTree(node)
+            nodes.extend(child_tree.GetAllNodes())
+        return nodes
 
     def FindNodesByValue(self, val):
-        # ваш код поиска узлов по значению
-        return []
-   
+        nodes = []
+        for node in self.GetAllNodes():
+            if node.NodeValue == val:
+                nodes.append(node)
+        return nodes
+
     def MoveNode(self, OriginalNode, NewParent):
-        # ваш код перемещения узла вместе с его поддеревом -- 
-        # в качестве дочернего для узла NewParent
-        pass  
-   
+        old_parent = OriginalNode.Parent
+        old_parent.Children.remove(OriginalNode)
+        NewParent.Children.append(OriginalNode)
+        OriginalNode.Parent = NewParent
+
     def Count(self):
-        # количество всех узлов в дереве
-        return 0
+        return len(self.GetAllNodes())
 
     def LeafCount(self):
-        # количество листьев в дереве
-        return 0
-    
-'''
-Само дерево в простейшем виде (допустим, класс SimpleTree) реализуется также максимально просто: это в общем случае всего лишь корневой элемент дерева. То есть в классе SimpleTree достаточно завести только одно поле, root, хранящее либо корневой узел, либо отсутствие значения.
-
-Какие операции в классе SimpleTree нам потребуются:
-- добавить текущему узлу (первый параметр метода добавления узла) новый узел (второй параметр метода добавления узла) в качестве дочернего (тест: проверяем наличие добавленного узла);
-- удалить некорневой узел (удаляется узел вместе со всем поддеревом) (тест: проверяем отсутствие удалённого узла и его потомков);
-- последовательно обойти всё дерево и сформировать список всех узлов в произвольном порядке;
-- найти список подходящих узлов по заданному значению (тест: проверяем результат с тестовым списком);
-- переместить некорневой узел дочерним узлом в другое место дерева (вместе с его поддеревом), для чего воспользуйтесь предыдущими методами (тест: проверяем, что узел отсутствует там где был исходно и появился в новом месте);
-- подсчитать общее количество узлов в дереве, и количество листьев (тест: проверяем на контрольном дереве количество узлов и листьев).
-
-Также напишите метод, который перебирает всё дерево и прописывает каждому узлу его уровень.
-Деревья очень "рекурсивны", наиболее удобно и правильно думать о них именно в парадигме рекурсивных вычислений [CS106B].
-
-Придумайте, как лучше организовать поддержку уровня узлов без анализа всего дерева.
-'''
+        node_count = self.Count()
+        if node_count < 1:
+            return 0
+        return node_count - 1
