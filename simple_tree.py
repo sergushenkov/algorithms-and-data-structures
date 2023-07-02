@@ -43,7 +43,8 @@ class SimpleTree:
         return len(self.GetAllNodes())
 
     def LeafCount(self):
-        node_count = self.Count()
-        if node_count < 1:
-            return 0
-        return node_count - 1
+        node_count = 0
+        for node in self.GetAllNodes():
+            if node.Children == []:
+                node_count += 1
+        return node_count
