@@ -8,6 +8,7 @@ def setup_only_root():
     tree = BST(root)
     return tree, root
 
+
 @pytest.fixture
 def setup_one_leaf():
     root = BSTNode(0, 'A', None)
@@ -60,6 +61,7 @@ def test_find_node_by_key(setup_one_leaf):
     assert found_node.NodeHasKey is False
     assert found_node.ToLeft is False
 
+
 def test_add_key_value(setup_only_root):
     tree, root = setup_only_root
     assert tree.AddKeyValue(10, 'J') is True
@@ -94,7 +96,8 @@ def test_add_key_value(setup_only_root):
     assert root.RightChild.RightChild.NodeValue == 'O'
     assert root.RightChild.RightChild.Parent is root.RightChild
     assert root.RightChild.RightChild.LeftChild is None
-    assert root.RightChild.RightChild.RightChild is None    
+    assert root.RightChild.RightChild.RightChild is None
+
 
 def test_find_min_max(setup_one_leaf):
     tree, root = setup_one_leaf
@@ -122,6 +125,7 @@ def test_find_min_max(setup_one_leaf):
     assert empty_tree.FinMinMax(root, True) is None
     assert empty_tree.FinMinMax(root, False) is None
 
+
 def test_delete_node_by_key(setup_one_leaf):
     tree, _ = setup_one_leaf
     tree.AddKeyValue(-10, 'j')
@@ -133,12 +137,22 @@ def test_delete_node_by_key(setup_one_leaf):
     assert tree.Count() == 7
     assert tree.DeleteNodeByKey(-10) is True
     assert tree.Count() == 6
-    assert tree.Root.LeftChild is None
     assert tree.FindNodeByKey(-10).NodeHasKey is False
+    assert tree.Root.LeftChild is None
+
     tree.DeleteNodeByKey(5)
     assert tree.Count() == 5
-    assert tree.Root.LeftChild is None
-    assert tree.FindNodeByKey(-10).NodeHasKey is False
+    assert tree.FindNodeByKey(5).NodeHasKey is False
+    assert tree.Root.RightChild.LeftChild.NodeKey == 7
+    assert tree.Root.RightChild.LeftChild.Parent.NodeKey == 10
+
+    tree.DeleteNodeByKey(10)
+    assert tree.Count() == 4
+    assert tree.FindNodeByKey(10).NodeHasKey is False
+    assert tree.Root.RightChild.NodeKey == 15
+    assert tree.Root.RightChild.LeftChild.Parent.NodeKey == 15
+    assert tree.Root.RightChild.LeftChild.NodeKey == 7
+
 
 def test_count(setup_only_root):
     empty_tree = BST()

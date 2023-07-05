@@ -3,27 +3,29 @@
 Иными словами, нам надо взять правого потомка удаляемого узла, и далее спускаться по всем левым потомкам. Если мы находим лист, то его и надо поместить вместо удаляемого узла. Если мы находим узел, у которого есть только правый потомок, то преемником берём этот узел, а вместо него помещаем его правого потомка.
 '''
 
+
 class BSTNode:
 
     def __init__(self, key, val, parent=None):
-        self.NodeKey = key # ключ узла
-        self.NodeValue = val # значение в узле
-        self.Parent = parent # родитель или None для корня
-        self.LeftChild = None # левый потомок
-        self.RightChild = None # правый потомок
+        self.NodeKey = key  # ключ узла
+        self.NodeValue = val  # значение в узле
+        self.Parent = parent  # родитель или None для корня
+        self.LeftChild = None  # левый потомок
+        self.RightChild = None  # правый потомок
 
 
-class BSTFind: # промежуточный результат поиска
+class BSTFind:  # промежуточный результат поиска
 
     def __init__(self):
-        self.Node = None # None если в дереве вообще нету узлов
-        self.NodeHasKey = False # True если узел найден
-        self.ToLeft = False # True, если родительскому узлу надо добавить новый узел левым потомком
+        self.Node = None  # None если в дереве вообще нету узлов
+        self.NodeHasKey = False  # True если узел найден
+        self.ToLeft = False  # True, если родительскому узлу надо добавить новый узел левым потомком
+
 
 class BST:
 
     def __init__(self, node=None):
-        self.Root = node # корень дерева или None
+        self.Root = node  # корень дерева или None
 
     def FindNodeByKey(self, key):
         found = BSTFind()
@@ -53,7 +55,7 @@ class BST:
         else:
             found_node.Node.RightChild = new_node
         return True
-  
+
     def FinMinMax(self, FromNode, FindMax):
         if self.Root is None or FromNode is None:
             return None
@@ -70,18 +72,47 @@ class BST:
                 next_node = next_node.LeftChild
         return found_node
 
-
     def DeleteNodeByKey(self, key):
-        found = self.FindNodeByKey(key)
-        if found.NodeHasKey is False:
+        for_delete = self.FindNodeByKey(key)
+        if for_delete.NodeHasKey is False:
             return False
-        if found.Node is self.Root:
-            
-        # if found.Node.LeftChild is None and found.Node.RightChild is None:
-        #     parent_node = found.Node.Parent
-        #     if parent_node 
-        # return True
-        
+
+        if for_delete.Node is self.Root:
+            self.Root = None
+            return True
+
+        if for_delete.Node.LeftChild is None and for_delete.Node.RightChild is None:
+            parent_node = for_delete.Node.Parent
+            if parent_node.LeftChild is for_delete.Node:
+                parent_node.LeftChild = None
+            else:
+                parent_node.RightChild = None
+            return True
+
+        if for_delete.Node.LeftChild is None or for_delete.Node.RightChild is None:
+            if for_delete.Node.LeftChild is None:
+                child_node = for_delete.Node.RightChild
+            else:
+                child_node = for_delete.Node.LeftChild
+            parent_node = for_delete.Node.Parent
+            child_node.Parent = parent_node
+            if parent_node.LeftChild is for_delete.Node:
+                parent_node.LeftChild = child_node
+            else:
+                parent_node.RightChild = child_node
+            return True
+
+        change_node = self.FinMinMax(for_delete.Node.RightChild, FindMax=False)
+        if change_node is not for_delete.Node.RightChild:
+            change_node.Parent.LeftChild = change_node.RightChild  # is None or node
+        change_node.LeftChild = for_delete.Node.LeftChild
+        change_node.LeftChild.Parent = change_node
+        if for_delete.Node.Parent.LeftChild is for_delete.Node:
+            for_delete.Node.Parent.LeftChild = change_node
+        else:
+            for_delete.Node.Parent.RightChild = change_node
+        change_node.Parent = for_delete.Node.Parent
+        return True
 
     def Count(self):
         if self.Root is None:
