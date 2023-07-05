@@ -1,8 +1,6 @@
 '''
-.  метод поиска (тест: проверяем поиск отсутствующего ключа в двух вариантах (запрошенный ключ добавляем либо левому, либо правому потомку) и поиск присутствующего ключа);
-.  метод добавления нового узла, задаём добавляемый ключ и соответствующее ему значение (тесты: проверяем исходное отсутствие узла по такому ключу в дереве и его наличие после добавления, в двух вариантах - левым или правым узлом родителя, а также попытку добавления ключа, которое уже имеется в дереве, в таком случае ничего с деревом не делаем);
-.  поиск максимального и минимального ключей, начиная с заданного узла (тест, 4 варианта: поиск начиная с корня и поиск начиная с поддерева, ищем максимальный и минимальный ключ);
-.  метод удаления узла по его ключу (тест: проверяем исходное наличие узла у родителя, его отсутствие после удаления, и результат работы метода).
+. Проблема в том, что нельзя просто взять и заменить узел одним его потомком, потому что тут возможны конфликтные ситуации, связанные с упорядоченностью ключей. Не будем углубляться в эту ситуацию, воспользуемся следующим правилом: удаляемый узел надо заменить так называемым узлом-преемником, ключ которого -- наименьший из всех ключей, которые больше ключа удаляемого узла.
+Иными словами, нам надо взять правого потомка удаляемого узла, и далее спускаться по всем левым потомкам. Если мы находим лист, то его и надо поместить вместо удаляемого узла. Если мы находим узел, у которого есть только правый потомок, то преемником берём этот узел, а вместо него помещаем его правого потомка.
 '''
 
 class BSTNode:
@@ -25,38 +23,75 @@ class BSTFind: # промежуточный результат поиска
 class BST:
 
     def __init__(self, node=None):
-        self.Root = node # корень дерева, или None
+        self.Root = node # корень дерева или None
 
     def FindNodeByKey(self, key):
-        found_node = BSTFind()
+        found = BSTFind()
         next_node = self.Root
-        found_node.Node = next_node
+        found.Node = next_node
         while next_node is not None and next_node.NodeKey != key:
             if key < next_node.NodeKey:
                 next_node = next_node.LeftChild
-                found_node.ToLeft = True
+                found.ToLeft = True
             else:
                 next_node = next_node.RightChild
-                found_node.ToLeft = False
+                found.ToLeft = False
             if next_node is not None:
-                found_node.Node = next_node
+                found.Node = next_node
         if next_node is None:
-            return found_node
-        found_node.NodeHasKey = True
-        return found_node
+            return found
+        found.NodeHasKey = True
+        return found
 
     def AddKeyValue(self, key, val):
-        # добавляем ключ-значение в дерево
-        return False # если ключ уже есть
+        found_node = self.FindNodeByKey(key)
+        if found_node.NodeHasKey is True:
+            return False
+        new_node = BSTNode(key, val, found_node.Node)
+        if found_node.ToLeft:
+            found_node.Node.LeftChild = new_node
+        else:
+            found_node.Node.RightChild = new_node
+        return True
   
     def FinMinMax(self, FromNode, FindMax):
-        # ищем максимальный/минимальный ключ в поддереве
-        # возвращается объект типа BSTNode
-        return None
+        if self.Root is None or FromNode is None:
+            return None
+        found_node = FromNode
+        if FindMax:
+            next_node = FromNode.RightChild
+        else:
+            next_node = FromNode.LeftChild
+        while next_node is not None:
+            found_node = next_node
+            if FindMax:
+                next_node = next_node.RightChild
+            else:
+                next_node = next_node.LeftChild
+        return found_node
+
 
     def DeleteNodeByKey(self, key):
-        # удаляем узел по ключу
-        return False # если узел не найден
+        found = self.FindNodeByKey(key)
+        if found.NodeHasKey is False:
+            return False
+        if found.Node is self.Root:
+            
+        # if found.Node.LeftChild is None and found.Node.RightChild is None:
+        #     parent_node = found.Node.Parent
+        #     if parent_node 
+        # return True
+        
 
     def Count(self):
-        return 0 # количество узлов в дереве
+        if self.Root is None:
+            return 0
+        node_count = 1
+        nodes = [self.Root.LeftChild, self.Root.RightChild]
+        while nodes:
+            node = nodes.pop()
+            if node is None:
+                continue
+            node_count += 1
+            nodes.extend([node.LeftChild, node.RightChild])
+        return node_count
