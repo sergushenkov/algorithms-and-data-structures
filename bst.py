@@ -74,11 +74,10 @@ class BST:
         if for_delete.NodeHasKey is False:
             return False
 
-        if for_delete.Node is self.Root:
-            self.Root = None
-            return True
-
         if for_delete.Node.LeftChild is None and for_delete.Node.RightChild is None:
+            if for_delete.Node is self.Root:
+                self.Root = None
+                return True            
             parent_node = for_delete.Node.Parent
             if parent_node.LeftChild is for_delete.Node:
                 parent_node.LeftChild = None
@@ -93,6 +92,9 @@ class BST:
                 child_node = for_delete.Node.LeftChild
             parent_node = for_delete.Node.Parent
             child_node.Parent = parent_node
+            if parent_node is None:
+                self.Root = child_node
+                return True
             if parent_node.LeftChild is for_delete.Node:
                 parent_node.LeftChild = child_node
             else:

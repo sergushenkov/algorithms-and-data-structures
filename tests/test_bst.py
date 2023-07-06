@@ -178,3 +178,43 @@ def test_count(setup_only_root):
     assert tree.Count() == 5
     tree.AddKeyValue(12, 'M')
     assert tree.Count() == 6
+
+def test_delete_node_by_key_all_cases(setup_only_root, setup_one_leaf):
+    empty_tree = BST()
+    assert empty_tree.DeleteNodeByKey(10) is False
+
+    tree, _ = setup_only_root
+    assert tree.Count() == 1
+    assert tree.DeleteNodeByKey(10) is False
+    assert tree.Count() == 1
+    assert tree.DeleteNodeByKey(0) is True
+    assert tree.Root is None
+    assert tree.Count() == 0
+
+    tree, _ = setup_one_leaf
+    assert tree.Count() == 2
+    assert tree.DeleteNodeByKey(1) is False
+    assert tree.Count() == 2
+    assert tree.FindNodeByKey(0).NodeHasKey is True
+    assert tree.DeleteNodeByKey(0) is True
+    assert tree.Count() == 1
+    assert tree.FindNodeByKey(0).NodeHasKey is False
+    assert tree.Root.NodeKey == 10
+    assert tree.Root.NodeValue == 'J'
+    assert tree.Root.Parent is None
+    assert tree.Root.LeftChild is None
+    assert tree.Root.RightChild is None
+
+    tree.AddKeyValue(0, 'A')
+    assert tree.Count() == 2
+    assert tree.FindNodeByKey(0).NodeHasKey is True
+    assert tree.FindNodeByKey(10).NodeHasKey is True
+    assert tree.Root.LeftChild.NodeKey == 0
+    assert tree.DeleteNodeByKey(10) is True
+    assert tree.Count() == 1
+    assert tree.FindNodeByKey(10).NodeHasKey is False
+    assert tree.Root.NodeKey == 0
+    assert tree.Root.NodeValue == 'A'
+    assert tree.Root.Parent is None
+    assert tree.Root.LeftChild is None
+    assert tree.Root.RightChild is None
