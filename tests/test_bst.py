@@ -98,6 +98,14 @@ def test_add_key_value(setup_only_root):
     assert root.RightChild.RightChild.LeftChild is None
     assert root.RightChild.RightChild.RightChild is None
 
+    empty_tree = BST()
+    assert empty_tree.AddKeyValue(5, 'E') is True
+    assert empty_tree.Root.NodeKey == 5
+    assert empty_tree.Root.NodeValue == 'E'
+    assert empty_tree.Root.Parent is None
+    assert empty_tree.Root.LeftChild is None
+    assert empty_tree.Root.RightChild is None
+
 
 def test_find_min_max(setup_one_leaf):
     tree, root = setup_one_leaf
