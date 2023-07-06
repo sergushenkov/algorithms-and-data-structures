@@ -1,5 +1,5 @@
 import pytest
-from bst import BSTNode, BSTFind, BST
+from bst import BSTNode, BST
 
 
 @pytest.fixture
@@ -162,7 +162,7 @@ def test_delete_node_by_key(setup_one_leaf):
     assert tree.Root.RightChild.LeftChild.NodeKey == 7
 
 
-def test_count(setup_only_root):
+def test_count(setup_only_root, setup_one_leaf):
     empty_tree = BST()
     assert empty_tree.Count() == 0
 
@@ -179,6 +179,11 @@ def test_count(setup_only_root):
     tree.AddKeyValue(12, 'M')
     assert tree.Count() == 6
 
+    tree, _ = setup_one_leaf
+    assert tree.Count() == 2
+    tree.AddKeyValue(-10, 'jj')
+    assert tree.Count() == 3
+
 def test_delete_node_by_key_all_cases(setup_only_root, setup_one_leaf):
     empty_tree = BST()
     assert empty_tree.DeleteNodeByKey(10) is False
@@ -191,6 +196,7 @@ def test_delete_node_by_key_all_cases(setup_only_root, setup_one_leaf):
     assert tree.Root is None
     assert tree.Count() == 0
 
+    # delete root with only right leaf
     tree, _ = setup_one_leaf
     assert tree.Count() == 2
     assert tree.DeleteNodeByKey(1) is False
@@ -205,6 +211,7 @@ def test_delete_node_by_key_all_cases(setup_only_root, setup_one_leaf):
     assert tree.Root.LeftChild is None
     assert tree.Root.RightChild is None
 
+    # delete root with only left leaf
     tree.AddKeyValue(0, 'A')
     assert tree.Count() == 2
     assert tree.FindNodeByKey(0).NodeHasKey is True
@@ -218,3 +225,57 @@ def test_delete_node_by_key_all_cases(setup_only_root, setup_one_leaf):
     assert tree.Root.Parent is None
     assert tree.Root.LeftChild is None
     assert tree.Root.RightChild is None
+
+    # delete root with two leaf
+    tree.AddKeyValue(10, 'J')
+    tree.AddKeyValue(-10, 'jj')
+    assert tree.Count() == 3
+    assert tree.FindNodeByKey(0).NodeHasKey is True
+    assert tree.FindNodeByKey(10).NodeHasKey is True
+    assert tree.FindNodeByKey(-10).NodeHasKey is True    
+    assert tree.Root.LeftChild.NodeKey == -10
+    assert tree.DeleteNodeByKey(0) is True
+    assert tree.Count() == 2
+    assert tree.FindNodeByKey(0).NodeHasKey is False
+    assert tree.Root.NodeKey == 10
+    assert tree.Root.NodeValue == 'J'
+    assert tree.Root.Parent is None
+    assert tree.Root.LeftChild.NodeKey == -10
+    assert tree.Root.RightChild is None
+
+    tree.AddKeyValue(15, '15')
+    tree.AddKeyValue(25, '25')
+    assert tree.Count() == 4
+    assert tree.FindNodeByKey(10).NodeHasKey is True
+    assert tree.FindNodeByKey(15).NodeHasKey is True
+    assert tree.FindNodeByKey(25).NodeHasKey is True 
+    assert tree.Root.NodeKey == 10   
+    assert tree.Root.LeftChild.NodeKey == -10
+    assert tree.Root.RightChild.NodeKey == 15
+    assert tree.Root.RightChild.RightChild.NodeKey == 25
+    assert tree.DeleteNodeByKey(10) is True
+    assert tree.Count() == 3
+    assert tree.FindNodeByKey(10).NodeHasKey is False
+    assert tree.Root.NodeKey == 15
+    assert tree.Root.NodeValue == '15'
+    assert tree.Root.Parent is None
+    assert tree.Root.LeftChild.NodeKey == -10
+    assert tree.Root.RightChild.NodeKey == 25
+
+    tree.AddKeyValue(20, '20')
+    tree.AddKeyValue(30, '30')
+    assert tree.Count() == 5
+    assert tree.FindNodeByKey(20).NodeHasKey is True
+    assert tree.FindNodeByKey(30).NodeHasKey is True
+    assert tree.Root.RightChild.NodeKey == 25
+    assert tree.Root.RightChild.LeftChild.NodeKey == 20
+    assert tree.Root.RightChild.RightChild.NodeKey == 30
+    assert tree.DeleteNodeByKey(15) is True
+    assert tree.Count() == 4
+    assert tree.FindNodeByKey(15).NodeHasKey is False
+    assert tree.Root.NodeKey == 20
+    assert tree.Root.Parent is None
+    assert tree.Root.LeftChild.NodeKey == -10
+    assert tree.Root.RightChild.NodeKey == 25
+    assert tree.Root.RightChild.LeftChild is None
+    assert tree.Root.RightChild.RightChild.NodeKey == 30

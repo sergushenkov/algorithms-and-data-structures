@@ -13,7 +13,7 @@ class BSTFind:  # промежуточный результат поиска
     def __init__(self):
         self.Node = None  # None если в дереве вообще нету узлов
         self.NodeHasKey = False  # True если узел найден
-        self.ToLeft = False  # True, если родительскому узлу надо добавить новый узел левым потомком
+        self.ToLeft = False  # True, если надо добавить новый узел левым потомком
 
 
 class BST:
@@ -106,11 +106,18 @@ class BST:
             change_node.Parent.LeftChild = change_node.RightChild  # is None or node
         change_node.LeftChild = for_delete.Node.LeftChild
         change_node.LeftChild.Parent = change_node
-        if for_delete.Node.Parent.LeftChild is for_delete.Node:
-            for_delete.Node.Parent.LeftChild = change_node
+        if for_delete.Node.RightChild is not change_node:
+            change_node.RightChild = for_delete.Node.RightChild
+            change_node.RightChild.Parent = change_node
+        parent = for_delete.Node.Parent
+        change_node.Parent = parent
+        if parent is None:
+            self.Root = change_node
+            return True
+        if parent.LeftChild is for_delete.Node:
+            parent.LeftChild = change_node
         else:
-            for_delete.Node.Parent.RightChild = change_node
-        change_node.Parent = for_delete.Node.Parent
+            parent.RightChild = change_node
         return True
 
     def Count(self):
