@@ -1,5 +1,4 @@
 class BSTNode:
-
     def __init__(self, key, val, parent=None):
         self.NodeKey = key  # ключ узла
         self.NodeValue = val  # значение в узле
@@ -9,7 +8,6 @@ class BSTNode:
 
 
 class BSTFind:  # промежуточный результат поиска
-
     def __init__(self):
         self.Node = None  # None если в дереве вообще нету узлов
         self.NodeHasKey = False  # True если узел найден
@@ -17,7 +15,6 @@ class BSTFind:  # промежуточный результат поиска
 
 
 class BST:
-
     def __init__(self, node=None):
         self.Root = node  # корень дерева или None
 
@@ -77,7 +74,7 @@ class BST:
         if for_delete.Node.LeftChild is None and for_delete.Node.RightChild is None:
             if for_delete.Node is self.Root:
                 self.Root = None
-                return True            
+                return True
             parent_node = for_delete.Node.Parent
             if parent_node.LeftChild is for_delete.Node:
                 parent_node.LeftChild = None
@@ -132,3 +129,50 @@ class BST:
             node_count += 1
             nodes.extend([node.LeftChild, node.RightChild])
         return node_count
+
+    def WideAllNodes(self):
+        if self.Root is None:
+            return ()
+        all_nodes = [self.Root]
+        node_index = 0
+        while node_index < len(all_nodes):
+            current_node = all_nodes[node_index]
+            if current_node.LeftChild is not None:
+                all_nodes.append(current_node.LeftChild)
+            if current_node.RightChild is not None:
+                all_nodes.append(current_node.RightChild)
+            node_index += 1
+        return tuple(all_nodes)
+
+    def DeepAllNodes(self, order=0):
+        if self.Root is None:
+            return ()
+        nodes_for_check = []
+        checked_nodes = set()
+        result = []
+        current_node = self.Root
+        while current_node is not None:
+            if current_node in checked_nodes:
+                is_not_checked = False
+            else:
+                is_not_checked = True
+            if is_not_checked and order == 0:
+                nodes_for_check.extend(
+                    [current_node.RightChild, current_node, current_node.LeftChild]
+                )
+            elif is_not_checked and order == 1:
+                nodes_for_check.extend(
+                    [current_node, current_node.RightChild, current_node.LeftChild]
+                )
+            elif is_not_checked and order == 2:
+                nodes_for_check.extend(
+                    [current_node.RightChild, current_node.LeftChild, current_node]
+                )
+            if is_not_checked:
+                checked_nodes.add(current_node)
+            else:
+                result.append(current_node)
+            current_node = None
+            while current_node is None and nodes_for_check:
+                current_node = nodes_for_check.pop()
+        return tuple(result)
