@@ -20,10 +20,9 @@ def test_init():
 
 def test_find_key_index():
     tree_3 = aBST(3)
-    i = 0
-    for key in (50, 25, 75, None, 37, 62, 84, None, None, 31, 43, 55, None, None, 92):
+    nodes = (50, 25, 75, None, 37, 62, 84, None, None, 31, 43, 55, None, None, 92)
+    for i, key in enumerate(nodes):
         tree_3.Tree[i] = key
-        i += 1
     assert tree_3.FindKeyIndex(44) is None
     assert tree_3.FindKeyIndex(37) == 4
     assert tree_3.FindKeyIndex(43) == 10
