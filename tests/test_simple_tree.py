@@ -180,3 +180,42 @@ def test_leaf_count(setup_only_root, setup_three_leaf):
     assert tree.LeafCount() == 2
     empty_tree = SimpleTree(None)
     assert empty_tree.LeafCount() == 0
+
+
+def nodes2values(nodes):
+    values = []
+    for node in nodes:
+        values.append(node.NodeValue)
+    return values
+
+
+def test_even_trees(setup_only_root, setup_three_leaf):
+    empty_tree = SimpleTree(None)
+    assert empty_tree.EvenTrees() == []
+    tree, _ = setup_only_root
+    assert tree.EvenTrees() == []
+
+    tree, _ = setup_three_leaf
+    assert nodes2values(tree.EvenTrees()) == [0, 1]
+
+    node_1 = SimpleTreeNode(1, None)
+    tree = SimpleTree(node_1)
+    node_2 = SimpleTreeNode(2, None)
+    tree.AddChild(node_1, node_2)
+    node_3 = SimpleTreeNode(3, None)
+    tree.AddChild(node_1, node_3)
+    node_6 = SimpleTreeNode(6, None)
+    tree.AddChild(node_1, node_6)
+    node_5 = SimpleTreeNode(5, None)
+    tree.AddChild(node_2, node_5)
+    node_7 = SimpleTreeNode(7, None)
+    tree.AddChild(node_2, node_7)
+    node_4 = SimpleTreeNode(4, None)
+    tree.AddChild(node_3, node_4)
+    node_8 = SimpleTreeNode(8, None)
+    tree.AddChild(node_6, node_8)
+    node_9 = SimpleTreeNode(9, None)
+    tree.AddChild(node_8, node_9)
+    node_10 = SimpleTreeNode(10, None)
+    tree.AddChild(node_8, node_10)
+    assert nodes2values(tree.EvenTrees()) == [1, 3, 1, 6]
