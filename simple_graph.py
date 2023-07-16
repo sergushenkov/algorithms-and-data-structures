@@ -69,47 +69,43 @@ class SimpleGraph:
 
     def DepthFirstSearch(self, VFrom, VTo):
         steak = []
-        vertex = VFrom
-        checked_vertex = {vertex}
-        steak.append(vertex)
+        vertex_index = VFrom
+        checked_vertex = {vertex_index}
+        steak.append(self.vertex[vertex_index])
         while steak:
-            neighbors = set()
-            for next_vertex, is_edge in enumerate(self.m_adjacency[vertex]):
-                if is_edge and next_vertex not in checked_vertex:
-                    neighbors.add(next_vertex)
-            if VTo in neighbors:
-                steak.append(VTo)
-                path = []
-                for vertex_index in steak:
-                    path.append(self.vertex[vertex_index])
-                return path
-            if neighbors:
-                vertex = neighbors.pop()
-                checked_vertex.add(vertex)
-                steak.append(vertex)
-                continue
-            vertex = steak.pop()
+            is_neighbor = False
+            for neighbor, is_edge in enumerate(self.m_adjacency[vertex_index]):
+                if not is_edge or neighbor in checked_vertex:
+                    continue
+                if VTo == neighbor:
+                    steak.append(self.vertex[VTo])
+                    return steak
+                checked_vertex.add(neighbor)
+                steak.append(self.vertex[neighbor])
+                is_neighbor = True
+                vertex_index = neighbor
+                break
+            if not is_neighbor:
+                next_vertex = steak.pop()
+                vertex_index = self.vertex.index(next_vertex)
         return []
 
     def BreadthFirstSearch(self, VFrom, VTo):
-        step = Step(VFrom, [VFrom])
+        step = Step(VFrom, [self.vertex[VFrom]])
         queue = Queue(step)
         checked_vertex = set()
         while queue.first is not None:
             current_vertex = queue.push_first()
             path = current_vertex.path
             checked_vertex.add(current_vertex.vertex_i)
-            for vertex, is_nearby in enumerate(self.m_adjacency[current_vertex.vertex_i]):
-                if not is_nearby or vertex in checked_vertex:
+            for vertex_index, is_edge in enumerate(self.m_adjacency[current_vertex.vertex_i]):
+                if not is_edge or vertex_index in checked_vertex:
                     continue
-                if vertex == VTo:
-                    path.append(vertex)
-                    result = []
-                    for vertex_index in path:
-                        result.append(self.vertex[vertex_index])
-                    return result
+                if vertex_index == VTo:
+                    path.append(self.vertex[vertex_index])
+                    return path
                 next_path = path.copy()
-                next_path.append(vertex)
-                next_vertex = Step(vertex, next_path)
+                next_path.append(self.vertex[vertex_index])
+                next_vertex = Step(vertex_index, next_path)
                 queue.add_last(next_vertex)
         return []
