@@ -127,3 +127,25 @@ def test_depth_first_search():
     assert vertex2value(graph.DepthFirstSearch(2, 1)) == [12, 11]
     graph.AddEdge(2, 3)
     assert vertex2value(graph.DepthFirstSearch(2, 5)) == [12, 11, 13, 14, 15]
+    # graph.AddEdge(5, 5)
+    assert vertex2value(graph.DepthFirstSearch(2, 5)) == [12, 11, 13, 14, 15]
+    assert vertex2value(graph.DepthFirstSearch(5, 0)) == []
+
+
+def test_breadth_first_search():
+    graph = SimpleGraph(6)
+    for number in (10, 11, 12, 13, 14, 15):
+        graph.AddVertex(number)
+    for edge in ((1, 2), (1, 3), (2, 3), (3, 4), (4, 5)):
+        graph.AddEdge(*edge)
+    assert vertex2value(graph.BreadthFirstSearch(0, 1)) == []
+    assert vertex2value(graph.BreadthFirstSearch(1, 2)) == [11, 12]
+    assert vertex2value(graph.BreadthFirstSearch(2, 1)) == []
+    assert vertex2value(graph.BreadthFirstSearch(2, 5)) == [12, 13, 14, 15]
+    graph.AddEdge(2, 1)
+    assert vertex2value(graph.BreadthFirstSearch(1, 2)) == [11, 12]
+    assert vertex2value(graph.BreadthFirstSearch(2, 1)) == [12, 11]
+    # graph.AddEdge(2, 3)
+    assert vertex2value(graph.BreadthFirstSearch(2, 5)) == [12, 13, 14, 15]
+    graph.AddEdge(3, 5)
+    assert vertex2value(graph.BreadthFirstSearch(2, 5)) == [12, 13, 15]

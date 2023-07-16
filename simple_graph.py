@@ -1,3 +1,31 @@
+class Step:
+
+    def __init__(self, vertex_index, path):
+        self.vertex_i = vertex_index
+        self.path = path
+        self.next = None
+
+
+class Queue:
+
+    def __init__(self, first=None):
+        self.first = first
+
+    def add_last(self, new_last):
+        if self.first is None:
+            self.first = new_last
+            return
+        current_last = self.first
+        while current_last.next is not None:
+            current_last = current_last.next
+        current_last.next = new_last
+
+    def push_first(self):
+        current_first = self.first
+        self.first = self.first.next
+        return current_first
+
+
 class Vertex:
 
     def __init__(self, val):
@@ -61,4 +89,27 @@ class SimpleGraph:
                 steak.append(vertex)
                 continue
             vertex = steak.pop()
+        return []
+
+    def BreadthFirstSearch(self, VFrom, VTo):
+        step = Step(VFrom, [VFrom])
+        queue = Queue(step)
+        checked_vertex = set()
+        while queue.first is not None:
+            current_vertex = queue.push_first()
+            path = current_vertex.path
+            checked_vertex.add(current_vertex.vertex_i)
+            for vertex, is_nearby in enumerate(self.m_adjacency[current_vertex.vertex_i]):
+                if not is_nearby or vertex in checked_vertex:
+                    continue
+                if vertex == VTo:
+                    path.append(vertex)
+                    result = []
+                    for vertex_index in path:
+                        result.append(self.vertex[vertex_index])
+                    return result
+                next_path = path.copy()
+                next_path.append(vertex)
+                next_vertex = Step(vertex, next_path)
+                queue.add_last(next_vertex)
         return []
