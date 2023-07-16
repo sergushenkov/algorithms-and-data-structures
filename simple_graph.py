@@ -29,9 +29,7 @@ class SimpleGraph:
             self.RemoveEdge(vertex_index, i)
 
     def IsEdge(self, vertex_index_1, vertex_index_2):
-        if self.m_adjacency[vertex_index_1][vertex_index_2] == 1:
-            return True
-        return False
+        return self.m_adjacency[vertex_index_1][vertex_index_2] == 1
 
     def AddEdge(self, vertex_index_1, vertex_index_2):
         self.m_adjacency[vertex_index_1][vertex_index_2] = 1
@@ -40,3 +38,24 @@ class SimpleGraph:
     def RemoveEdge(self, vertex_index_1, vertex_index_2):
         self.m_adjacency[vertex_index_1][vertex_index_2] = 0
         # self.m_adjacency[vertex_index_2][vertex_index_1] = 0
+
+    def DepthFirstSearch(self, VFrom, VTo):
+        steak = []
+        vertex = VFrom
+        checked_vertex = {vertex}
+        steak.append(vertex)
+        while steak:
+            neighbors = set()
+            for next_vertex, is_edge in enumerate(self.m_adjacency[vertex]):
+                if is_edge and next_vertex not in checked_vertex:
+                    neighbors.add(next_vertex)
+            if VTo in neighbors:
+                steak.append(VTo)
+                return steak
+            if neighbors:
+                vertex = neighbors.pop()
+                checked_vertex.add(vertex)
+                steak.append(vertex)
+                continue
+            vertex = steak.pop()
+        return steak
