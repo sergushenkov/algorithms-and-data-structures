@@ -51,11 +51,14 @@ class SimpleGraph:
                     neighbors.add(next_vertex)
             if VTo in neighbors:
                 steak.append(VTo)
-                return steak
+                path = []
+                for vertex_index in steak:
+                    path.append(self.vertex[vertex_index])
+                return path
             if neighbors:
                 vertex = neighbors.pop()
                 checked_vertex.add(vertex)
                 steak.append(vertex)
                 continue
             vertex = steak.pop()
-        return steak
+        return []

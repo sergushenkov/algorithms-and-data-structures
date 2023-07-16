@@ -105,18 +105,25 @@ def test_remove_vertex():
     assert graph.IsEdge(0, 3) is True
 
 
+def vertex2value(vertexes):
+    values = []
+    for vertex in vertexes:
+        values.append(vertex.Value)
+    return values
+
+
 def test_depth_first_search():
     graph = SimpleGraph(6)
     for number in (10, 11, 12, 13, 14, 15):
         graph.AddVertex(number)
     for edge in ((1, 2), (1, 3), (2, 3), (3, 4), (4, 5)):
         graph.AddEdge(*edge)
-    assert graph.DepthFirstSearch(0, 1) == []
-    assert graph.DepthFirstSearch(1, 2) == [1, 2]
-    assert graph.DepthFirstSearch(2, 1) == []
-    assert graph.DepthFirstSearch(2, 5) == [2, 3, 4, 5]
+    assert vertex2value(graph.DepthFirstSearch(0, 1)) == []
+    assert vertex2value(graph.DepthFirstSearch(1, 2)) == [11, 12]
+    assert vertex2value(graph.DepthFirstSearch(2, 1)) == []
+    assert vertex2value(graph.DepthFirstSearch(2, 5)) == [12, 13, 14, 15]
     graph.AddEdge(2, 1)
-    assert graph.DepthFirstSearch(1, 2) == [1, 2]
-    assert graph.DepthFirstSearch(2, 1) == [2, 1]
+    assert vertex2value(graph.DepthFirstSearch(1, 2)) == [11, 12]
+    assert vertex2value(graph.DepthFirstSearch(2, 1)) == [12, 11]
     graph.AddEdge(2, 3)
-    assert graph.DepthFirstSearch(2, 5) == [2, 1, 3, 4, 5]
+    assert vertex2value(graph.DepthFirstSearch(2, 5)) == [12, 11, 13, 14, 15]
