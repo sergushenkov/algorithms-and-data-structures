@@ -109,3 +109,32 @@ class SimpleGraph:
                 next_vertex = Step(vertex_index, next_path)
                 queue.add_last(next_vertex)
         return []
+
+    def WeakVertices(self):
+        weak_vertices = []
+        for vertex_index, vertex in enumerate(self.vertex):
+            neighbors = set()
+            for neighbor_i, is_edge in enumerate(self.m_adjacency[vertex_index]):
+                if is_edge:
+                    neighbors.add(neighbor_i)
+            for neighbor_i, row in enumerate(self.m_adjacency):
+                if row[vertex_index] == 1:
+                    neighbors.add(neighbor_i)
+            neighbors.discard(vertex_index)
+            is_weak_vertix = True
+            while neighbors:
+                first_neighbor = neighbors.pop()
+                for neighbor_i, is_edge in enumerate(self.m_adjacency[first_neighbor]):
+                    if (is_edge and neighbor_i != first_neighbor
+                            and neighbor_i in neighbors):
+                        is_weak_vertix = False
+                        break
+                for neighbor_i, row in enumerate(self.m_adjacency):
+                    if (row[first_neighbor] == 1 and neighbor_i != first_neighbor
+                            and neighbor_i in neighbors):
+                        is_weak_vertix = False
+                        break
+            if is_weak_vertix:
+                weak_vertices.append(vertex)
+
+        return weak_vertices

@@ -149,3 +149,34 @@ def test_breadth_first_search():
     assert vertex2value(graph.BreadthFirstSearch(2, 5)) == [12, 13, 14, 15]
     graph.AddEdge(3, 5)
     assert vertex2value(graph.BreadthFirstSearch(2, 5)) == [12, 13, 15]
+
+
+def test_weak_vertices():
+    empty_graph = SimpleGraph(0)
+    assert vertex2value(empty_graph.WeakVertices()) == []
+
+    graph_2 = SimpleGraph(2)
+    graph_2.AddVertex(11)
+    graph_2.AddVertex(12)
+    assert vertex2value(graph_2.WeakVertices()) == [11, 12]
+
+    graph_3 = SimpleGraph(3)
+    for number in (11, 12, 13):
+        graph_3.AddVertex(number)
+    assert vertex2value(graph_3.WeakVertices()) == [11, 12, 13]
+    graph_3.AddEdge(1, 2)
+    graph_3.AddEdge(0, 1)
+    assert vertex2value(graph_3.WeakVertices()) == [11, 12, 13]
+    graph_3.AddEdge(2, 0)
+    assert vertex2value(graph_3.WeakVertices()) == []
+
+    graph_5 = SimpleGraph(5)
+    for number in (11, 12, 13, 14, 15):
+        graph_5.AddVertex(number)
+    for edge in ((0, 1), (1, 2), (2, 3), (4, 3), (0, 4)):
+        graph_5.AddEdge(*edge)
+    assert vertex2value(graph_5.WeakVertices()) == [11, 12, 13, 14, 15]
+    graph_5.AddEdge(3, 1)
+    assert vertex2value(graph_5.WeakVertices()) == [11, 15]
+    graph_5.AddEdge(0, 3)
+    assert vertex2value(graph_5.WeakVertices()) == []
