@@ -1,0 +1,125 @@
+class Node:
+
+    def __init__(self, v):
+        self.value = v
+        self.next = None
+
+
+class LinkedList<T>
+    # скрытые поля
+    private Node|None head  # голова, первый элемент списка
+    private Node|None tail  # хвост, последний элемент списка
+    private Node|None cursor  # текущий элемент списка
+    private int right_status;  # статус команды right()
+    private int find_status;  # статус команды find()
+    private int get_status;  # статус команды get()
+ 
+    # интерфейс класса, реализующий АТД Stack
+    public const int RIGHT_OK = 1;  # последняя right() отработала нормально
+    public const int RIGHT_ERR = 2;  # курсор указывал на tail
+
+    public const int FIND_OK = 1;  # последний find() нашёл искомое значение справа
+    public const int FIND_ERR = 2;  # последний find() нашёл искомое значение слева
+    public const int FIND_ERR = 2;  # последний find() не нашёл искомое значение в списке 
+
+    public const int GET_OK = 1;  # последний get() отработал нормально
+    public const int GET_ERR = 2;  # список пуст  
+ 
+    public void LinkedList()  # конструктор
+        # постусловие: 1) создан новый пустой связанный список 2) курсор указывает на head()
+        head = None
+        tail = None
+        cursor = None
+        right_status = 1
+        find_status = 1
+        get_status = 2
+        
+    # КОМАНДЫ
+    public void head()
+        # постусловие: курсор указывает на head
+        cursor = head
+
+    public void push()
+        # постусловие: курсор указывает на tail
+        cursor = tail
+        
+    public void right()
+        # предусловие - текущий узел не tail
+        # постусловие: курсор указывает на следующий узел за текущим
+        if cursor = tail:
+            right_status = RIGHT_ERR
+        else:
+            right_status = RIGHT_OK
+            cursor = cursor.next
+
+    public void put_right(T value)
+        # постусловие: 1) справа от текущего узла вставлен новый узел с указанным значением 2) курсор указывает на текущий узел или на head() (если список был пуст)
+
+    public void put_left(T value)
+        # постусловие: 1) слева от текущего узла вставлен новый узел с указанным значением 2) курсор указывает на текущий узел или на head() (если список был пуст)
+
+    public void remove()
+        # постусловие - 1) текущий элемент удалён 2) курсор указывает (первый из имеющихся) - на правого соседа, на левого соседа, на head
+
+    public void clear()
+        # постусловие - 1) список пуст 2) курсор указывает на head
+        head = None
+        tail = None
+        cursor = None
+        right_status = 1
+        find_status = 1
+        get_status = 2
+
+    public void add_tail(T value)
+        # постусловие - 1) в конец списка добавлен новый узел с указанным значением 2) курсор указывает - на текущий узел, на head (если список был пуст)
+
+    public void replace(T value)
+        # постусловие - текущий элемент имеет заданное значение 2) курсор указывает - на текущий узел, на head (если список был пуст) 
+
+    public void find(T value)
+        # предусловие - в списке есть искомое значение
+        # постусловие - курсор указывает (первый из имеющихся) - искомый элемент справа, искомый элемент слева, текущий узел
+        
+    public void remove_all(T value)
+        # постусловие - 1) в списке нет заданных значений 2) курсор указывает (первый из имеющихся) - на текущий узел, на правого соседа, на левого соседа, на head
+        
+    # ЗАПРОСЫ
+    public int get()
+        # предусловие - список не пуст
+        if size = 0:
+            get_status = GET_ERR
+            return 0
+        get_status = GET_OK
+        return cursor.value
+
+    public int size()
+        return 0
+
+    public bool is_head()
+        if cursor = head:
+            return True
+        return False
+
+    public bool is_tail()
+        if cursor = tail:
+            return True
+        return False
+
+    public bool is_value()
+        if cursor is None:
+            return False
+        return True
+    
+    # запросы статусов
+    public int get_right_status()
+        return right_status
+
+    public int get_find_status()
+        return find_status
+ 
+    public int get_get_status()
+        return get_status
+ 
+2. Чисто технически можно обойтись без операции tail(), последовательно перемещая курсор, пока он не дойдёт до последнего элемента. Но этот способ будет иметь сложность O(n), что явно хуже, чем простое присваивание cursor = tail (O(1))
+
+3. Операция поиска всех узлов с заданным значением, выдающая список таких узлов, уже не нужна, потому что если требуется найти все узлы, мы последовательно выполняем find(T value) (если get_find_status после первого запроса не вернул FIND_ERR), пока не вернётся тот же элемент, что в первый раз
