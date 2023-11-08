@@ -20,7 +20,7 @@ class LinkedList<T>
 
     public const int FIND_OK = 1;  # последний find() нашёл искомое значение справа
     public const int FIND_ERR = 2;  # последний find() нашёл искомое значение слева
-    public const int FIND_ERR = 2;  # последний find() не нашёл искомое значение в списке 
+    public const int FIND_ERR = 3;  # последний find() не нашёл искомое значение в списке 
 
     public const int GET_OK = 1;  # последний get() отработал нормально
     public const int GET_ERR = 2;  # список пуст  
@@ -39,7 +39,7 @@ class LinkedList<T>
         # постусловие: курсор указывает на head
         cursor = head
 
-    public void push()
+    public void tail()
         # постусловие: курсор указывает на tail
         cursor = tail
         
