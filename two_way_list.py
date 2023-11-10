@@ -250,7 +250,7 @@ class TwoWayList(ParentLinkedList):
     def left(self):
         """
         предусловие: слева от курсора есть элементы
-        постусловие: курсор указывает на узел за текущим"""
+        постусловие: курсор указывает на узел перед текущим"""
         if self._cursor is None or self._cursor.prev is None:
             self._left_status = ParentLinkedList.LEFT_ERR
             return

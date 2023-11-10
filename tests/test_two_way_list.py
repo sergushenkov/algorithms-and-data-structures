@@ -8,7 +8,8 @@ def test_class_vars():
     assert LinkedList.LEFT_ERR == 2
     assert LinkedList.FIND_R == 1
     assert LinkedList.FIND_L == 2
-    assert LinkedList.FIND_ERR == 3
+    assert LinkedList.FIND_CUR == 3
+    assert LinkedList.FIND_ERR == 4
     assert LinkedList.GET_OK == 1
     assert LinkedList.GET_ERR == 2
 
