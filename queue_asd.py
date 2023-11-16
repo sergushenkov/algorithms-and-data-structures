@@ -5,13 +5,12 @@ class Node:
         self.prev = None
 
 
-class Queue:
+class Queue_ASD:
+    GET_OK = 1  # последний get_*() отработал нормально
+    GET_ERR = 2  # список пуст
 
-    DEQUEUE_OK = 1  # последний dequeue() отработал нормально
-    DEQUEUE_ERR = 2  # список пуст
-
-    POP_OK = 1  # последний pop() отработал нормально
-    POP_ERR = 2  # список пуст
+    REMOVE_OK = 1  # последний remove_*() отработал нормально
+    REMOVE_ERR = 2  # список пуст
 
     def __init__(self):
         """
@@ -22,11 +21,10 @@ class Queue:
         self._head = None
         self._tail = None
         self._size = 0
-        self._pop_status = Queue.POP_ERR
-        self._dequeue_status = Queue.DEQUEUE_ERR
+        self._remove_status = Queue.REMOVE_ERR
+        self._get_status = Queue.GET_ERR
 
-
-    def enqueue(self, value):
+    def add_tail(self, value):
         """
         Постусловие - в хвост очереди добавлено новое значение"""
         node = Node(value)
@@ -40,14 +38,14 @@ class Queue:
         self._tail = node
         self._size += 1
 
-    def pop(self):
+    def remove_front(self):
         """
         Предусловие - очередь не пуста
         Постусловие - удалено значение из головы, сместив очередь влево"""
         if self._head is None:
-            self._pop_status = Queue.POP_ERR
+            self._remove_status = Queue.REMOVE_ERR
             return
-        self._pop_status = Queue.POP_OK
+        self._remove_status = Queue.REMOVE_OK
         self._size -= 1
         if self._head.next is None:
             self._head = None
@@ -56,29 +54,65 @@ class Queue:
         self._head.next.prev = None
         self._head = self._head.next
 
-    def clear(self):
-        """
-        Постусловие:
-        1) очередь пуста"""
-        self._head = None
-        self._tail = None
-        self._size = 0
-
-    def dequeue(self):
+    def get_head(self):
         """
         выдача из головы"""
         if self._head is None:
-            self._dequeue_status = Queue.DEQUEUE_ERR
+            self._get_status = Queue.GET_ERR
             return None
-        self._dequeue_status = Queue.DEQUEUE_OK
+        self._get_status = Queue.GET_OK
         return self._head.value
-    
+
     def size(self):
         return self._size
-    
-    def get_dequeue_status(self):
-        return self._dequeue_status
-    
-    def get_pop_status(self):
-        return self._pop_status    
-    
+
+    def get_get_status(self):
+        return self._get_status
+
+    def get_remove_status(self):
+        return self._remove_status
+
+
+class Queue(Queue_ASD):
+    pass
+
+
+class Dequeue(Queue_ASD):
+    def add_front(self, value):
+        """
+        Постусловие - в голову очереди добавлено новое значение"""
+        node = Node(value)
+        if self._head is None:
+            self._head = node
+            self._tail = node
+            self._size = 1
+            return
+        self._head.prev = node
+        node.next = self._head
+        self._head = node
+        self._size += 1
+
+    def remove_tail(self):
+        """
+        Предусловие - очередь не пуста
+        Постусловие - удалено значение из хвоста"""
+        if self._head is None:
+            self._remove_status = Queue.REMOVE_ERR
+            return
+        self._remove_status = Queue.REMOVE_OK
+        self._size -= 1
+        if self._head.next is None:
+            self._head = None
+            self._tail = None
+            return
+        self._tail.prev.next = None
+        self._tail = self._tail.prev
+
+    def get_tail(self):
+        """
+        выдача из головы"""
+        if self._head is None:
+            self._get_status = Queue.GET_ERR
+            return None
+        self._get_status = Queue.GET_OK
+        return self._tail.value
