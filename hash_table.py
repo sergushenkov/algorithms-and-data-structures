@@ -1,7 +1,6 @@
 class HashTable:
     PUT_STATUS_OK = 0
     PUT_STATUS_NOT_HASH = 1
-    PUT_STATUS_NOT_FREE_SLOT = 2
     PUT_STATUS_TOO_MANY_COLLISIONS = 2
     REMOVE_STATUS_OK = 0
     REMOVE_STATUS_NOT_HASH = 1
@@ -46,7 +45,7 @@ class HashTable:
             self._put_status = self.PUT_STATUS_NOT_HASH
             return
         if index == -2:
-            self._put_status = self.PUT_STATUS_NOT_FREE_SLOT
+            self._put_status = self.PUT_STATUS_TOO_MANY_COLLISIONS
             return
         self._slots[index] = value
         self._put_status = self.PUT_STATUS_OK
@@ -74,12 +73,24 @@ class HashTable:
         if index is not None and self._slots[index] == value:
             return True
         return False
+    
+    def get(self, value):
+        """
+        Проверяет принадлежность значения value хэш-таблице"""
+        index = self._seek_slot(value)
+        if index is not None and self._slots[index] == value:
+            return True
+        return False
 
     def get_put_status(self):
         return self._put_status
 
     def get_remove_status(self):
         return self._remove_status
-
-    def capacity(self):
-        return self._capacity
+    
+    def size(self):
+        cnt = 0
+        for slot in self._slots:
+            if slot is not None:
+                cnt += 1
+        return cnt

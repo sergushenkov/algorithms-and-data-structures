@@ -4,7 +4,6 @@ from hash_table import HashTable
 def test_init():
     capacity = 10
     hash_table = HashTable(capacity)
-    assert hash_table.capacity() == capacity
     assert hash_table.get_put_status() == HashTable.PUT_STATUS_OK
     assert hash_table.get_remove_status() == HashTable.REMOVE_STATUS_OK
 
@@ -31,7 +30,7 @@ def test_put_double():
     hash_table.put("c")
     assert hash_table.get_put_status() == HashTable.PUT_STATUS_OK
     hash_table.put("d")
-    assert hash_table.get_put_status() == HashTable.PUT_STATUS_NOT_FREE_SLOT
+    assert hash_table.get_put_status() == HashTable.PUT_STATUS_TOO_MANY_COLLISIONS
     assert "a" in hash_table
     assert "b" in hash_table
     assert "c" in hash_table
@@ -65,6 +64,7 @@ def test_remove():
     for i in (1, 5, 9, 12):
         hash_table.put(i)
         assert i in hash_table
+    assert hash_table.size() == 4
     hash_table.remove(5)
     assert hash_table.get_remove_status() == HashTable.REMOVE_STATUS_OK
     assert 5 not in hash_table
